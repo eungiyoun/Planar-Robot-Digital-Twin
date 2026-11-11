@@ -1,0 +1,61 @@
+[project]
+name = "2026-spring-me498-group-2"
+version = "2.4.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.14"
+authors = [
+    {name = "Will Hunter", email = "whunter3@illinois.edu"},
+    {name = "Yixiao Liu", email = "yixiaol2@illinois.edu"},
+    {name = "Sahil Sarangi", email = "sarangi4@illinois.edu"},
+    {name = "Eungi Youn", email = "eungiy2@illinois.edu"},
+    {name = "Liyuan Zhang", email = "liyuan3@illinois.edu"}
+]
+
+dependencies = [
+    "matplotlib>=3.10.0",
+    "numba>=0.64.0",
+    "numpy>=2.4.2",
+    "pytest>=9.0.2",
+    "ruff>=0.15.2",
+    "scipy>=1.17.0",
+    "shapely>=2.1.2",
+    "tqdm>=4.67.3",
+]
+
+[project.urls]
+Repository = "https://github.com/STAGE-lab/2026-Spring-ME498-Group-2"
+Issues = "https://github.com/STAGE-lab/2026-Spring-ME498-Group-2/issues"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/rse"]
+
+[tool.hatch.build.targets.sdits]
+include = ["/src"]
+
+exclude = [
+    ".git",
+    ".hg",
+    ".mypy_cache",
+    ".tox",
+    ".venv",
+    "__pycache__",
+    "_build",
+    "buck-out",
+    "build",
+    "dist",
+    "env",
+    "venv",
+]
+
+[tool.ruff.lint]
+# Select the rule sets to enable.
+# "E" (pycodestyle errors), "W" (pycodestyle warnings), and "F" (Pyflakes)
+# are a good starting point to replicate flake8's default behavior.
+select = ["E", "F", "W"]
+
+

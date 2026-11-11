@@ -1,0 +1,9 @@
+from typing import Protocol
+
+
+class RobotProtocol(Protocol):
+    def compute_kinematics(self, time_current: float, time_step: float) -> None: ...
+
+    def compute_dynamics(self, time_current: float, time_step: float) -> None: ...
+
+    def compute_loads(self, time_current: float, time_step: float) -> None: ...

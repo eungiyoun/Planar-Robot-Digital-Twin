@@ -1,0 +1,76 @@
+================================================================
+inflate_grid Audit — ME 498 Final Project
+Generated: 2026-04-27
+inflate_grid version: boundary-aware padded disk dilation
+  (occ_grid padded with 1.0 before dilation so grid edge = obstacle wall)
+================================================================
+
+INFLATE_GRID FUNCTION
+  File:          src/rse/planning/_astar.py
+  Radius input:  inflation_radius_m=0.2, ds=0.1
+  radius_cells:  int(ceil(0.2/0.1)) = 2  (uses ceil — robust to fp rounding)
+  Strategy:      np.pad(occ_grid, 2, constant_values=1.0) then disk dilation
+  Cell counts after inflation (30x40 = 1200 total cells):
+    0.0  free      :  660
+    0.5  inflated  :  300  (was 132 without boundary treatment)
+    1.0  obstacle  :  240
+  unique values    :  {0.0, 0.5, 1.0}  ✓
+
+================================================================
+REQUIREMENT A — inflate_grid propagation checklist
+================================================================
+
+File                         | imports inflate_grid | calls inflate_grid | hand-rolled removed
+-----------------------------|----------------------|--------------------|--------------------
+FinalProjectTask1.py         | yes                  | yes                | n/a (already clean)
+FinalProjectTask2_1.py       | yes                  | yes                | yes
+FinalProjectTask2_2.py       | yes                  | yes                | yes
+FinalProjectTask3_1.py       | yes                  | yes                | yes
+FinalProjectTask3_2.py       | yes                  | yes                | n/a (already clean)
+
+All five tasks confirmed using inflate_grid(occ_grid, 0.2, res).
+Inflated cell count after fix: 300 (same for all tasks — same arena, same parameters).
+
+================================================================
+REQUIREMENT B — three-color grid visualization checklist
+================================================================
+
+File                         | GRID_CMAP defined | imshow updated | legend added
+-----------------------------|-------------------|----------------|-------------
+FinalProjectTask1.py         | yes               | yes (1 plot)   | yes (patches)
+FinalProjectTask2_1.py       | yes               | yes (1 plot)   | yes (patches)
+FinalProjectTask2_2.py       | yes               | yes (2 plots)  | yes (fig1 only)
+FinalProjectTask3_1.py       | yes               | yes (3 plots)  | yes (traj + teb)
+FinalProjectTask3_2.py       | yes               | yes (2 plots)  | yes (trajectory)
+
+Colormap used across ALL files:
+  GRID_CMAP = ListedColormap(['#ffffff', '#ffb380', '#404040'])
+  vmin=0, vmax=1, interpolation='nearest'
+
+================================================================
+INFLATE_GRID: PER-TASK CELL COUNT VERIFICATION
+================================================================
+
+Task 1   inflate_grid(occ_grid, 0.2, 0.1) -> {0.0: 660, 0.5: 300, 1.0: 240}  ✓
+Task 2.1 inflate_grid(occ_grid, 0.2, 0.1) -> {0.0: 660, 0.5: 300, 1.0: 240}  ✓
+Task 2.2 inflate_grid(occ_grid, 0.2, 0.1) -> {0.0: 660, 0.5: 300, 1.0: 240}  ✓
+Task 3.1 inflate_grid(occ_grid, 0.2, 0.1) -> {0.0: 660, 0.5: 300, 1.0: 240}  ✓
+Task 3.2 inflate_grid(occ_grid, 0.2, 0.1) -> {0.0: 660, 0.5: 300, 1.0: 240}  ✓
+
+================================================================
+NOTES
+================================================================
+
+- Task 1.1 now shows inf_grid as background even though A* runs on occ_grid.
+  Title updated to: "A* baseline (planning on uninflated grid; inflation shown for reference)"
+  Both paths in Task 1.2 overlaid on the same inf_grid background.
+
+- Task 2.2 output_dir fixed from relative "outputs" to absolute path relative to
+  the script file (same pattern as all other tasks).
+
+- Task 3.2 MAX_SEGMENT_TIME increased from 30.0 s to 50.0 s to accommodate the
+  PI settling time after integral reset (~42 s measured in isolation for segment 3).
+  All three segments confirmed ARRIVED with SEED=42:
+    Segment 1: ARRIVED at [1.2, 1.3]              after 26.82 s
+    Segment 2: ARRIVED at [0.657, -0.208]          after 19.82 s
+    Segment 3: ARRIVED at [-0.974, 1.617]          after 29.12 s
